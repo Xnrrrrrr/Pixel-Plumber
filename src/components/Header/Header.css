@@ -1,0 +1,5 @@
+.image-top {
+    width: 100vw;
+    background-image: url('../../assets/mushroom-background.png');
+    background-position: cover;
+}

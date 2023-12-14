@@ -1,42 +1,55 @@
-// GameComponent.js
 import { useEffect } from 'react';
 import * as Phaser from 'phaser';
+import { Scene1 } from '../../scenes/Scene1';
+import { Scene2 } from '../../scenes/Scene2';
 
-const GameComponent = () => {
+const Game = () => {
     useEffect(() => {
         // Create a new Phaser.Game instance
         const config = {
             type: Phaser.AUTO,
             width: 800,
             height: 600,
-            scene: {
-                preload: preload,
-                create: create,
-                update: update,
+            backgroundColor: 0xff000,
+            scene: [Scene1, Scene2],
+            callbacks: {
+                postBoot: (game) => {
+                    // Center the canvas after the game boots
+                    const canvas = game.canvas;
+
+                    canvas.style.display = 'block';
+                    canvas.style.margin = 'auto';
+
+                    window.addEventListener('resize', () => {
+                        // Recenter the canvas on window resize
+                        canvas.style.margin = 'auto';
+                    });
+                },
             },
         };
 
         const game = new Phaser.Game(config);
 
-        function preload() {
-            // Load assets here
-        }
-
         function create() {
-            // Initialize game objects here
+            const canvas = game.canvas;
+
+            // Center the canvas horizontally and vertically
+            canvas.style.display = 'block';
+            canvas.style.margin = 'auto';
         }
 
-        function update() {
-            // Game update logic here
-        }
+        // Set up Phaser event listeners
+        game.events.on('resize', () => {
+            // Recenter the canvas when the game is resized
+            create();
+        });
 
-        // Clean up when the component is unmounted
         return () => {
             game.destroy(true);
         };
     }, []);
 
-    return <div className="phaser-game-container">steve</div>;
+    return <div className="phaser-game-container"></div>;
 };
 
-export default GameComponent;
+export default Game;
